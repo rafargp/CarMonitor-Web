@@ -189,8 +189,15 @@ let client = {
             dataKmh = Travels.getSensors(id, "0D", startDate, endDate, carState);
         }
 
+        let sumRPM = dataRPM.reduce((a, b) => a + b.behaviour, 0);
+        let avgRPM = (sumRPM / dataRPM.length) || 0;
+        let sumKmh = dataKmh.reduce((a, b) => a + b.behaviour, 0);
+        let avgKmh = (sumKmh / dataKmh.length) || 0;
+        let avgScore = (avgRPM+avgKmh) / 2;
+        $("#score").html(`${avgScore.toFixed(2)}%`);
+
         dataRPM = dataRPM.map(x => [x.receive_date*1000, x.value]);
-        dataKmh = dataKmh.map(x => [x.receive_date*1000, x.value]);
+        dataKmh = dataKmh.map(x => [x.receive_date*1000, x.value]);       
 
         carChart.series[0].setData(dataKmh);
         carChart.series[1].setData(dataRPM);
